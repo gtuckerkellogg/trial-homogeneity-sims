@@ -1,0 +1,6 @@
+age_group	n_treatment	n_control	i_treatment	i_control
+18-30	1596	521	1	4
+31-40	3848	1259	4	13
+41-50	4399	1443	4	15
+51-60	3510	1146	5	22
+>60	1611	533	2	8
