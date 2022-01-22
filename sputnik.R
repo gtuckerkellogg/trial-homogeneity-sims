@@ -14,9 +14,9 @@ n_simulations <- 50000
 
 # Minimum and maximum per-group efficacy that we would publish.
 
-eff.min <- 0.899 
+eff.min <- 0.9003 
 
-eff.max <- 0.931
+eff.max <- 0.9271
 
 
 ## data from the paper
