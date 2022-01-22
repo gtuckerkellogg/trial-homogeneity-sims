@@ -34,7 +34,7 @@ overall_infection_rates <- function(patient_group_df) {
   }
 
 
-simGroup <- function(n_patients,control_ir,treatment_ir,treatment_prob = 0.75) { 
+simGroup <- function(n_patients,control_ir,treatment_ir,treatment_prob) { 
   # simulate a group of n_patients with given infection rates, randomly assigned into treatment or control groups
   # according to the given probability
   # return efficacy if calculable, NA if not
@@ -55,7 +55,7 @@ simGroup <- function(n_patients,control_ir,treatment_ir,treatment_prob = 0.75) {
 }
 
 
-simTrial <- function(patient_groups,as_equal=TRUE) { 
+simTrial <- function(patient_groups,treatment_prob,as_equal=TRUE) { 
   # simulate a trial of patient groups passed in as a data frame
   if (as_equal) { 
     ir <- overall_infection_rates(patient_groups)
@@ -63,14 +63,16 @@ simTrial <- function(patient_groups,as_equal=TRUE) {
                                     control_ir=ir[['control']],
                                     treatment_ir=ir[['treatment']])
   }
- dplyr:: mutate(rowwise(patient_groups),efficacy=simGroup(n_patients,control_ir,treatment_ir))
+ dplyr:: mutate(rowwise(patient_groups),efficacy=simGroup(n_patients,control_ir,treatment_ir,treatment_prob))
 }
 
-simTrials <- function(patient_groups,n_simulations,as_equal=TRUE) { 
+simTrials <- function(patient_groups,n_simulations,treatment_prob,as_equal=TRUE) { 
+  pb <- progress::progress_bar$new(total=n_simulations)
+  pb$tick(0)
   purrr::map_df(1:n_simulations,
                 function(.n) {
-                  print(sprintf("trial %3d", .n));
-                  simTrial(patient_groups,as_equal) %>% mutate(sim_num=.n)})
+                  pb$tick()
+                  simTrial(patient_groups,treatment_prob,as_equal) %>% mutate(sim_num=.n)})
   
 }
 
