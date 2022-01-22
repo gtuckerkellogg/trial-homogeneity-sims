@@ -40,18 +40,32 @@ fig1_results <- read_tsv(here('data/studies.tsv'),show_col_types=FALSE) %>%
                     ylim(0,1) + theme_bw() + 
                     theme(legend.position='none')))
 
-## Figure 1, sized for A4
+
+
+test_fig <- fig1_results %>%
+    mutate(plt=list(plot_results(sim,min_eff,max_eff)+
+                    ggtitle(sprintf("%s: %d wins",study,sum(summary$win))) +
+                    ylim(0,1) + theme_bw()))
+
+fig1_legend  <-     cowplot::get_legend(test_fig$plt[[1]] +
+                                        theme(legend.key.size = unit(1.5, "cm"),
+                                              legend.key.width = unit(1.5,"in")) +
+                                        scale_color_discrete(name="Simulation efficacy range within\ntrial reported efficacy range")
+                                        )
+
 
 pdf(here('results/fig1.pdf'),width=210/25.4,,height=297/25.4)
-(fig1_results$plt[[1]] +
-    fig1_results$plt[[2]] +
-    fig1_results$plt[[3]] +
-    fig1_results$plt[[4]] +
-    fig1_results$plt[[5]] +
-    plot_layout(ncol=2)) +  plot_annotation(tag_levels = 'A')
+(test_fig$plt[[1]] +
+    test_fig$plt[[2]] +
+    test_fig$plt[[3]] +
+    test_fig$plt[[4]] +
+    test_fig$plt[[5]]) * theme(legend.position='none') +
+    fig1_legend + 
+    plot_layout(ncol=2) +  plot_annotation(tag_levels = list(c('A','B','C','D','E')))
 dev.off()
 
-
+           
+           
 n_simulations <- 50000
 
 results <- read_tsv(here('data/studies.tsv'),show_col_types=FALSE) %>%
