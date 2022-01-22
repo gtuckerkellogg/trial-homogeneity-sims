@@ -12,15 +12,14 @@ set.seed(1) #for reproducibility
 
 n_simulations <- 1000
 
-
 # Minimum and maximum per-group efficacy that we would publish.
 
 eff.min <- 0.7213
 
 eff.max <- 0.8260
 
-treatment_allocation = 0.66
-
+treatment_allocation = 2/3
+treatment_allocation
 
 ## data from the paper
 

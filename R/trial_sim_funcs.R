@@ -7,6 +7,7 @@
 ## - i_control (infections in control group) 
 ## - i_treatment (infections in treatment group)
 
+
 import_patient_groups <- function(fn) {
   data <- readr::read_tsv(fn,show_col_types=FALSE)
   if (all(c('group','n_control','n_treatment') %in% names(data))) {
@@ -66,14 +67,25 @@ simTrial <- function(patient_groups,treatment_prob,as_equal=TRUE) {
  dplyr:: mutate(rowwise(patient_groups),efficacy=simGroup(n_patients,control_ir,treatment_ir,treatment_prob))
 }
 
-simTrials <- function(patient_groups,n_simulations,treatment_prob,as_equal=TRUE) { 
-  pb <- progress::progress_bar$new(total=n_simulations)
-  pb$tick(0)
-  purrr::map_df(1:n_simulations,
+simTrials <- function(patient_groups,n_simulations,treatment_prob,as_equal=TRUE) {
+   pb <- progress::progress_bar$new(total=n_simulations)
+   pb$tick(0)
+   map_dfr(1:n_simulations,
                 function(.n) {
-                  pb$tick()
-                  simTrial(patient_groups,treatment_prob,as_equal) %>% mutate(sim_num=.n)})
+                 pb$tick()
+                    simTrial(patient_groups,treatment_prob,as_equal) %>% mutate(sim_num=.n)})
   
+  
+}
+
+
+parallel_simTrials <- function(patient_groups,n_simulations,treatment_prob,as_equal=TRUE) {
+   future::plan(multicore)
+   furrr::future_map_dfr(1:n_simulations,
+                         function(.n) {
+                             simTrial(patient_groups,treatment_prob,as_equal) %>% mutate(sim_num=.n)},
+                         .options= furrr::furrr_options(seed=TRUE),
+                         .progress=TRUE)
 }
 
 
@@ -92,11 +104,12 @@ plot_results <- function(results,eff.min,eff.max) {
   summarised_results %>%
     arrange(min_efficacy,win,max_efficacy) %>% 
     ggplot(aes(x=1:nrow(summarised_results),ymin=min_efficacy,ymax=max_efficacy,color=win)) + 
-    geom_linerange() + 
-    geom_hline(yintercept=eff.min) + geom_hline(yintercept=eff.max) + 
-    xlab("Trial simulations in rank order of minimum effect size") + 
-    ylab("effect size range in patient age groups per simulated trial") + 
-    coord_flip() + 
-    cowplot::theme_cowplot()
+      geom_linerange() + 
+      geom_hline(yintercept=eff.min) + geom_hline(yintercept=eff.max) +
+      xlab("Trial simulations in rank order of minimum effect size") +
+      ylim(0,1) + 
+      ylab("effect size range in patient age groups per simulated trial") + 
+      coord_flip() + 
+      cowplot::theme_cowplot()
 }
 
