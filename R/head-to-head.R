@@ -81,10 +81,12 @@ fig2a <- results$plt[[5]]
 fig2b <- ggplot(results,aes(x=study,y=trials_to_win,label=round(trials_to_win,1))) + 
   geom_col(width=0.5) + geom_text(position=position_dodge(width=0.9), vjust=-0.25) + 
   ylab("trial repetitions") + xlab("") + 
-  cowplot::theme_cowplot() 
+    cowplot::theme_cowplot()  +
+    scale_x_discrete(guide = guide_axis(angle = 45),labels=function(x){sub("/", "/\n", x)}) +
+    theme(axis.text.x = element_text(size = rel(0.8)))
 
 pdf(here('results/fig2.pdf'),width=210/25.4,,height=(297/2.5)/25.4)
-fig2a + fig2b + plot_annotation(tag_levels = 'A')
+fig2a + fig2b +  plot_annotation(tag_levels = 'A')
 dev.off()
 
 save.image()
