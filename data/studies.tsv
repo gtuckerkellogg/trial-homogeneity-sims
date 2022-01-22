@@ -1,6 +1,6 @@
 study	data_file	strata	allocation_ratio	n	ve	min_eff	max_eff
 AstraZeneca	az.tsv	2	2:1	26242	0.7316	0.7213	0.826
-JJ	janssen.tsv	2	1:1	43783	0.6703	0.6392	0.7632
+J&J Janssen	janssen.tsv	2	1:1	43783	0.6703	0.6392	0.7632
 Moderna	moderna.tsv	2	1:1	28207	0.9415	0.8642	0.9559
-Pfizer	pfizer.tsv	4	1:1	35680	0.9485	0.9284	1
+Pfizer/BioNTech	pfizer.tsv	4	1:1	35680	0.9485	0.9284	1
 Sputnik	sputnik.tsv	5	3:1	19866	0.9164	0.9003	0.9271

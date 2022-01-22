@@ -7,6 +7,8 @@
 ## - i_control (infections in control group) 
 ## - i_treatment (infections in treatment group)
 
+library(furrr)
+
 
 import_patient_groups <- function(fn) {
   data <- readr::read_tsv(fn,show_col_types=FALSE)
@@ -80,12 +82,13 @@ simTrials <- function(patient_groups,n_simulations,treatment_prob,as_equal=TRUE)
 
 
 parallel_simTrials <- function(patient_groups,n_simulations,treatment_prob,as_equal=TRUE) {
-   future::plan(multicore)
-   furrr::future_map_dfr(1:n_simulations,
-                         function(.n) {
-                             simTrial(patient_groups,treatment_prob,as_equal) %>% mutate(sim_num=.n)},
-                         .options= furrr::furrr_options(seed=TRUE),
-                         .progress=TRUE)
+    future::plan(multicore)
+    print("\n")
+    furrr::future_map_dfr(1:n_simulations,
+                          function(.n) {
+                              simTrial(patient_groups,treatment_prob,as_equal) %>% mutate(sim_num=.n)},
+                          .options= furrr::furrr_options(seed=TRUE),
+                          .progress=TRUE)
 }
 
 
@@ -106,10 +109,8 @@ plot_results <- function(results,eff.min,eff.max) {
     ggplot(aes(x=1:nrow(summarised_results),ymin=min_efficacy,ymax=max_efficacy,color=win)) + 
       geom_linerange() + 
       geom_hline(yintercept=eff.min) + geom_hline(yintercept=eff.max) +
-      xlab("Trial simulations in rank order of minimum effect size") +
-      ylim(0,1) + 
-      ylab("effect size range in patient age groups per simulated trial") + 
-      coord_flip() + 
-      cowplot::theme_cowplot()
+      xlab("Simulation") +
+      ylab("efficacy range across age groups") + 
+      coord_flip()
 }
 
