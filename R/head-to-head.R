@@ -90,6 +90,11 @@ results <- results %>%
                     theme(legend.position='none')))
 
 
+results %>% mutate(wins=sum(summary$win),
+                   percent_win=wins/500) %>%
+    select(study,wins,percent_win) %>%
+    write_csv(here('results','big_sim.csv'))
+
 fig2a <- results$plt[[5]]
     
 fig2b <- ggplot(results,aes(x=study,y=trials_to_win,label=round(trials_to_win,1))) + 

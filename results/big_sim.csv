@@ -1,0 +1,6 @@
+data_file,min_eff,max_eff,treatment_allocation,study,wins,percent_win
+/home/gtk/work/trial-homogeneity-sims/data/az.tsv,0.7213,0.826,0.6666666666666666,AstraZeneca,13131,26.262
+/home/gtk/work/trial-homogeneity-sims/data/janssen.tsv,0.6392,0.7632,0.5,J&J/Janssen,23884,47.768
+/home/gtk/work/trial-homogeneity-sims/data/moderna.tsv,0.8642,0.9559,0.5,Moderna,23774,47.548
+/home/gtk/work/trial-homogeneity-sims/data/pfizer.tsv,0.9284,1,0.5,Pfizer/BioNTech,13601,27.202
+/home/gtk/work/trial-homogeneity-sims/data/sputnik.tsv,0.9003,0.9271,0.75,Sputnik,13,0.026
