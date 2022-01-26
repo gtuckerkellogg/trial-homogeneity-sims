@@ -1,4 +1,4 @@
-# Covid-19 vaccine trial simulations
+# Plausibility of claimed Covid-19 Vaccine Efficacies by Age: A Simulation Study
 
 The central question: “how likely is this range of results if the point estimate of efficacy is the true underlying efficacy?". Point estimates of efficacy are obtained from the entire cohort and from individual patient age groups. The question here is whether a simulation model with the reported overall efficacy is able to reproduce the ranges of reported per patient-group efficacies. If it is difficult to produce ranges as precise as reported, the interpretation is that it is difficult to achieve that level of consistency in the ideal case, and unlikely to be generated from experimental data without other supporting evidence.
 
